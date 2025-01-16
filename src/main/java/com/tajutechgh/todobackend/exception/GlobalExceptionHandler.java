@@ -33,6 +33,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(TodoAPIException.class)
+    public ResponseEntity<ErrorDetails> handleTodoAPIException(TodoAPIException exception, WebRequest webRequest){
+
+        ErrorDetails errorDetails = new ErrorDetails(
+                LocalDateTime.now(),
+                exception.getMessage(),
+                webRequest.getDescription(false),
+                exception.getStatus().toString()
+        );
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.valueOf(exception.getStatus().value()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetails> handleGlobalException(Exception exception, WebRequest webRequest){
 
