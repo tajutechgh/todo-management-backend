@@ -1,5 +1,7 @@
 package com.tajutechgh.todobackend.config;
 
+import com.tajutechgh.todobackend.security.jwt.JwtAuthenticationEntrypoint;
+import com.tajutechgh.todobackend.security.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -14,14 +16,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SpringSecurityConfig {
 
     private UserDetailsService userDetailsService;
+    private JwtAuthenticationEntrypoint authenticationEntrypoint;
+    private JwtAuthenticationFilter authenticationFilter;
 
-    public SpringSecurityConfig(UserDetailsService userDetailsService) {
+    public SpringSecurityConfig(UserDetailsService userDetailsService, JwtAuthenticationEntrypoint authenticationEntrypoint,
+                                JwtAuthenticationFilter authenticationFilter) {
         this.userDetailsService = userDetailsService;
+        this.authenticationEntrypoint = authenticationEntrypoint;
+        this.authenticationFilter = authenticationFilter;
     }
 
     @Bean
@@ -42,9 +50,14 @@ public class SpringSecurityConfig {
 //            authorize.requestMatchers(HttpMethod.PATCH, "/api/v1/todos/complete/{id}").hasAnyRole("USER", "ADMIN");
 //            authorize.requestMatchers(HttpMethod.PATCH, "/api/v1/todos/incomplete/{id}").hasAnyRole("USER", "ADMIN");
             authorize.requestMatchers("/api/v1/auth/**").permitAll();
+            authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
             authorize.anyRequest().authenticated();
 
         }).httpBasic(Customizer.withDefaults());
+
+        http.exceptionHandling((exception) -> exception.authenticationEntryPoint( authenticationEntrypoint));
+
+        http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -1,15 +1,14 @@
 package com.tajutechgh.todobackend.controller;
 
+import com.tajutechgh.todobackend.dto.JwtAuthResponse;
 import com.tajutechgh.todobackend.dto.LoginDto;
 import com.tajutechgh.todobackend.dto.RegisterDto;
 import com.tajutechgh.todobackend.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -31,10 +30,14 @@ public class AuthController {
 
     // TODO: login user
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<JwtAuthResponse> login(@RequestBody LoginDto loginDto) {
 
-        String response = authService.loginUser(loginDto);
+        String token = authService.loginUser(loginDto);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
+
+        jwtAuthResponse.setAccessToken(token);
+
+        return new ResponseEntity<>(jwtAuthResponse, HttpStatus.OK);
     }
 }

@@ -7,6 +7,7 @@ import com.tajutechgh.todobackend.entity.User;
 import com.tajutechgh.todobackend.exception.TodoAPIException;
 import com.tajutechgh.todobackend.repository.RoleRepository;
 import com.tajutechgh.todobackend.repository.UserRepository;
+import com.tajutechgh.todobackend.security.jwt.JwtTokenProvider;
 import com.tajutechgh.todobackend.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,12 +27,15 @@ public class AuthServiceImplementation implements AuthService {
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
     private AuthenticationManager authenticationManager;
+    private JwtTokenProvider jwtTokenProvider;
 
-    public AuthServiceImplementation(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
+    public AuthServiceImplementation(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder,
+                                     AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @Override
@@ -74,6 +78,8 @@ public class AuthServiceImplementation implements AuthService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return "user logged in successfully";
+        String token = jwtTokenProvider.generateToken(authentication);
+
+        return token;
     }
 }
