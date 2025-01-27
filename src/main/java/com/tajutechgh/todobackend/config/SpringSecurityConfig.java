@@ -42,13 +42,13 @@ public class SpringSecurityConfig {
 
         http.csrf((csrf) -> csrf.disable()).authorizeHttpRequests((authorize) -> {
 
-//            authorize.requestMatchers(HttpMethod.GET, "/api/v1/todos/all").hasAnyRole("USER", "ADMIN");
-//            authorize.requestMatchers(HttpMethod.GET, "/api/v1/todos/get/{id}").hasAnyRole("USER", "ADMIN");
-//            authorize.requestMatchers(HttpMethod.POST, "/api/v1/todos/create").hasRole("ADMIN");
-//            authorize.requestMatchers(HttpMethod.PUT, "/api/v1/todos/update/{id}").hasRole("ADMIN");
-//            authorize.requestMatchers(HttpMethod.DELETE, "/api/v1/todos/delete/{id}").hasRole("ADMIN");
-//            authorize.requestMatchers(HttpMethod.PATCH, "/api/v1/todos/complete/{id}").hasAnyRole("USER", "ADMIN");
-//            authorize.requestMatchers(HttpMethod.PATCH, "/api/v1/todos/incomplete/{id}").hasAnyRole("USER", "ADMIN");
+            authorize.requestMatchers(HttpMethod.GET, "/api/v1/todos/all").hasAnyAuthority("USER", "ADMIN");
+            authorize.requestMatchers(HttpMethod.GET, "/api/v1/todos/get/{id}").hasAuthority( "ADMIN");
+            authorize.requestMatchers(HttpMethod.POST, "/api/v1/todos/create").hasAuthority("ADMIN");
+            authorize.requestMatchers(HttpMethod.PUT, "/api/v1/todos/update/{id}").hasAuthority("ADMIN");
+            authorize.requestMatchers(HttpMethod.DELETE, "/api/v1/todos/delete/{id}").hasAuthority("ADMIN");
+            authorize.requestMatchers(HttpMethod.PATCH, "/api/v1/todos/complete/{id}").hasAnyAuthority("USER", "ADMIN");
+            authorize.requestMatchers(HttpMethod.PATCH, "/api/v1/todos/incomplete/{id}").hasAnyAuthority("USER", "ADMIN");
             authorize.requestMatchers("/api/v1/auth/**").permitAll();
             authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
             authorize.anyRequest().authenticated();

@@ -32,11 +32,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<JwtAuthResponse> login(@RequestBody LoginDto loginDto) {
 
-        String token = authService.loginUser(loginDto);
-
-        JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
-
-        jwtAuthResponse.setAccessToken(token);
+        JwtAuthResponse jwtAuthResponse = authService.loginUser(loginDto);
 
         return new ResponseEntity<>(jwtAuthResponse, HttpStatus.OK);
     }
