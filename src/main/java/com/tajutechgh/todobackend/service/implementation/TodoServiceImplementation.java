@@ -6,6 +6,10 @@ import com.tajutechgh.todobackend.exception.ResourceNotFoundException;
 import com.tajutechgh.todobackend.mapper.TodoMapper;
 import com.tajutechgh.todobackend.repository.TodoRepository;
 import com.tajutechgh.todobackend.service.TodoService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,6 +50,16 @@ public class TodoServiceImplementation implements TodoService {
         List<Todo> todos = todoRepository.findAll();
 
         return todos.stream().map(TodoMapper::mapToTodoDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<TodoDto> listByPage(int pageNum, int pageSize, String sortField) {
+
+        Sort sort = Sort.by(sortField).ascending();
+
+        Pageable pageable = PageRequest.of(pageNum, pageSize, sort);
+
+        return todoRepository.findAll(pageable).map(TodoMapper::mapToTodoDto);
     }
 
     @Override

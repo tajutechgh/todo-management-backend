@@ -1,17 +1,28 @@
 package com.tajutechgh.todobackend.controller;
 
 import com.tajutechgh.todobackend.dto.TodoDto;
+import com.tajutechgh.todobackend.entity.Todo;
 import com.tajutechgh.todobackend.service.TodoService;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestParam;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin("*")
 @RestController
+@Validated
 @RequestMapping("/api/v1/todos")
 public class TodoController {
+
+    private ModelMapper modelMapper;
 
     private TodoService todoService;
 
@@ -33,6 +44,24 @@ public class TodoController {
     public ResponseEntity<List<TodoDto>> getAllTodos() {
 
         List<TodoDto> todoDtos = todoService.getAllTodos();
+
+        return new ResponseEntity<>(todoDtos, HttpStatus.OK);
+    }
+
+    @GetMapping("/all-todos")
+    public  ResponseEntity<List<TodoDto>> getAllTodosByPage(
+            @RequestParam(value = "page", required = false, defaultValue = "1") @Min(value = 1) Integer pageNum,
+            @RequestParam(value = "size", required = false, defaultValue = "5") @Min(value = 5) @Max(value = 10) Integer pageSize,
+            @RequestParam(value = "sort", required = false, defaultValue = "id") String sortOption ){
+
+        Page<TodoDto> page = todoService.listByPage(pageNum - 1, pageSize, sortOption);
+
+        List<TodoDto> todoDtos = page.getContent();
+
+        if (todoDtos.isEmpty()){
+
+            return ResponseEntity.noContent().build();
+        }
 
         return new ResponseEntity<>(todoDtos, HttpStatus.OK);
     }
