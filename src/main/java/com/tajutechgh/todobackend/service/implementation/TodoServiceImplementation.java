@@ -67,12 +67,18 @@ public class TodoServiceImplementation implements TodoService {
 
     @Override
     public List<TodoDto> getAllCompletedTodosByUser(boolean completed, Integer userId) {
-        return List.of();
+
+        List<Todo> completedTodos = todoRepository.findAllByCompleted(completed, userId);
+
+        return completedTodos.stream().map(TodoMapper::mapToTodoDto).collect(Collectors.toList());
     }
 
     @Override
     public List<TodoDto> getAllPendingTodosByUser(boolean completed, Integer userId) {
-        return List.of();
+
+        List<Todo> pendingTodos = todoRepository.findAllByCompleted(completed, userId);
+
+        return pendingTodos.stream().map(TodoMapper::mapToTodoDto).collect(Collectors.toList());
     }
 
     @Override

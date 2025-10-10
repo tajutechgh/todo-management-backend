@@ -54,8 +54,6 @@ public class AuthController {
 
         String username = authentication.getName();
 
-        System.out.println("current username = " +username);
-
         User user = userRepository.findByUsername(username).orElseThrow(
 
                 () -> new UsernameNotFoundException("Current user not found")

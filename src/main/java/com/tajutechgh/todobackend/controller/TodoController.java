@@ -1,11 +1,15 @@
 package com.tajutechgh.todobackend.controller;
 
 import com.tajutechgh.todobackend.dto.TodoDto;
+import com.tajutechgh.todobackend.entity.User;
+import com.tajutechgh.todobackend.repository.UserRepository;
 import com.tajutechgh.todobackend.service.TodoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,9 +27,11 @@ public class TodoController {
     private ModelMapper modelMapper;
 
     private TodoService todoService;
+    private UserRepository userRepository;
 
-    public TodoController(TodoService todoService) {
+    public TodoController(TodoService todoService, UserRepository userRepository) {
         this.todoService = todoService;
+        this.userRepository = userRepository;
     }
 
     // TOD0: create todo
@@ -44,6 +50,42 @@ public class TodoController {
         List<TodoDto> todoDtos = todoService.getAllTodos();
 
         return new ResponseEntity<>(todoDtos, HttpStatus.OK);
+    }
+
+    // TODO: get all completed todos
+    @GetMapping("/completed")
+    public ResponseEntity<List<TodoDto>> getAllCompletedTodos(Authentication authentication){
+
+        boolean completed = true;
+
+        String username = authentication.getName();
+
+        User user = userRepository.findByUsername(username).orElseThrow(
+
+                () -> new UsernameNotFoundException("Current user not found")
+        );
+
+        List<TodoDto> completedTodoDtos = todoService.getAllCompletedTodosByUser(completed, user.getId());
+
+        return new ResponseEntity<>(completedTodoDtos, HttpStatus.OK);
+    }
+
+    // TODO: get all pending todos
+    @GetMapping("/pending")
+    public ResponseEntity<List<TodoDto>> getAllPendingTodos(Authentication authentication){
+
+        boolean completed = false;
+
+        String username = authentication.getName();
+
+        User user = userRepository.findByUsername(username).orElseThrow(
+
+                () -> new UsernameNotFoundException("Current user not found")
+        );
+
+        List<TodoDto> completedTodoDtos = todoService.getAllCompletedTodosByUser(completed, user.getId());
+
+        return new ResponseEntity<>(completedTodoDtos, HttpStatus.OK);
     }
 
     @GetMapping("/all-todos")
