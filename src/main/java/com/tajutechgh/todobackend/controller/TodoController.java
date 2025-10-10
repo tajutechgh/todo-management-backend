@@ -1,7 +1,6 @@
 package com.tajutechgh.todobackend.controller;
 
 import com.tajutechgh.todobackend.dto.TodoDto;
-import com.tajutechgh.todobackend.entity.Todo;
 import com.tajutechgh.todobackend.service.TodoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -14,7 +13,6 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @CrossOrigin("*")
 @RestController
