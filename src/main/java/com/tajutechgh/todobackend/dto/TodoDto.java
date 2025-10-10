@@ -2,27 +2,29 @@ package com.tajutechgh.todobackend.dto;
 
 public class TodoDto {
 
-    private Long id;
+    private Integer id;
     private String title;
     private String description;
     private boolean completed;
+    private Integer userId;
 
     public TodoDto() {
 
     }
 
-    public TodoDto(Long id, String title, String description, boolean completed) {
+    public TodoDto(Integer id, String title, String description, boolean completed, Integer userId) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.completed = completed;
+        this.userId = userId;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -48,5 +50,13 @@ public class TodoDto {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

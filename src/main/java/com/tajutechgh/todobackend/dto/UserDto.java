@@ -1,7 +1,5 @@
 package com.tajutechgh.todobackend.dto;
 
-import com.tajutechgh.todobackend.entity.Role;
-
 public class UserDto {
 
     private String name;

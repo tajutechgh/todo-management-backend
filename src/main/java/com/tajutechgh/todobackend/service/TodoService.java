@@ -8,19 +8,23 @@ import java.util.List;
 
 public interface TodoService {
 
-    TodoDto createTodo(TodoDto todoDto);
+    TodoDto createTodo(TodoDto todoDto, Integer userId);
 
-    TodoDto getTodo(Long id);
+    TodoDto getTodo(Integer id);
 
     List<TodoDto> getAllTodos();
 
+    List<TodoDto> getAllCompletedTodosByUser(boolean completed, Integer userId);
+
+    List<TodoDto> getAllPendingTodosByUser(boolean completed, Integer userId);
+
     Page<TodoDto> listByPage(int pageNum, int pageSize, String sortField);
 
-    TodoDto updateTodo(Long id, TodoDto todoDto);
+    TodoDto updateTodo(Integer id, TodoDto todoDto);
 
-    void deleteTodo(Long id);
+    void deleteTodo(Integer id);
 
-    TodoDto completeTodo(Long id);
+    TodoDto completeTodo(Integer id);
 
-    TodoDto inCompleteTodo(Long id);
+    TodoDto inCompleteTodo(Integer id);
 }

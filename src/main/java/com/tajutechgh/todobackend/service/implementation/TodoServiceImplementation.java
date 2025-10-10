@@ -2,9 +2,11 @@ package com.tajutechgh.todobackend.service.implementation;
 
 import com.tajutechgh.todobackend.dto.TodoDto;
 import com.tajutechgh.todobackend.entity.Todo;
+import com.tajutechgh.todobackend.entity.User;
 import com.tajutechgh.todobackend.exception.ResourceNotFoundException;
 import com.tajutechgh.todobackend.mapper.TodoMapper;
 import com.tajutechgh.todobackend.repository.TodoRepository;
+import com.tajutechgh.todobackend.repository.UserRepository;
 import com.tajutechgh.todobackend.service.TodoService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,15 +21,26 @@ import java.util.stream.Collectors;
 public class TodoServiceImplementation implements TodoService {
 
     private TodoRepository todoRepository;
+    private UserRepository userRepository;
 
-    public TodoServiceImplementation(TodoRepository todoRepository) {
+    public TodoServiceImplementation(TodoRepository todoRepository, UserRepository userRepository) {
         this.todoRepository = todoRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public TodoDto createTodo(TodoDto todoDto) {
+    public TodoDto createTodo(TodoDto todoDto, Integer userId) {
 
-        Todo todo = TodoMapper.mapToTodo(todoDto);
+        User user = userRepository.findById(userId).orElseThrow(
+
+                () -> new ResourceNotFoundException("User ", "id",  userId )
+        );
+
+        Todo todo = new Todo();
+
+        todo.setTitle(todoDto.getTitle());
+        todo.setDescription(todoDto.getDescription());
+        todo.setUser(user);
 
         Todo savedTodo = todoRepository.save(todo);
 
@@ -35,7 +48,7 @@ public class TodoServiceImplementation implements TodoService {
     }
 
     @Override
-    public TodoDto getTodo(Long id) {
+    public TodoDto getTodo(Integer id) {
 
         Todo todo = todoRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Todo", "id", id)
@@ -53,6 +66,16 @@ public class TodoServiceImplementation implements TodoService {
     }
 
     @Override
+    public List<TodoDto> getAllCompletedTodosByUser(boolean completed, Integer userId) {
+        return List.of();
+    }
+
+    @Override
+    public List<TodoDto> getAllPendingTodosByUser(boolean completed, Integer userId) {
+        return List.of();
+    }
+
+    @Override
     public Page<TodoDto> listByPage(int pageNum, int pageSize, String sortField) {
 
         Sort sort = Sort.by(sortField).ascending();
@@ -63,7 +86,7 @@ public class TodoServiceImplementation implements TodoService {
     }
 
     @Override
-    public TodoDto updateTodo(Long id, TodoDto todoDto) {
+    public TodoDto updateTodo(Integer id, TodoDto todoDto) {
 
         Todo todo = todoRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Todo", "id", id)
@@ -79,7 +102,7 @@ public class TodoServiceImplementation implements TodoService {
     }
 
     @Override
-    public void deleteTodo(Long id) {
+    public void deleteTodo(Integer id) {
 
         Todo todo = todoRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Todo", "id", id)
@@ -89,7 +112,7 @@ public class TodoServiceImplementation implements TodoService {
     }
 
     @Override
-    public TodoDto completeTodo(Long id) {
+    public TodoDto completeTodo(Integer id) {
 
         Todo todo = todoRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Todo", "id", id)
@@ -103,7 +126,7 @@ public class TodoServiceImplementation implements TodoService {
     }
 
     @Override
-    public TodoDto inCompleteTodo(Long id) {
+    public TodoDto inCompleteTodo(Integer id) {
 
         Todo todo = todoRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Todo", "id", id)

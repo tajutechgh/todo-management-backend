@@ -8,7 +8,7 @@ public class Todo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -18,22 +18,27 @@ public class Todo {
 
     private boolean completed;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Todo() {
 
     }
 
-    public Todo(Long id, String title, String description, boolean completed) {
+    public Todo(Integer id, String title, String description, boolean completed, User user) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.completed = completed;
+        this.user = user;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -59,6 +64,14 @@ public class Todo {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

@@ -32,7 +32,7 @@ public class TodoController {
     @PostMapping("/create")
     public ResponseEntity<TodoDto> createTodo(@RequestBody TodoDto todoDto) {
 
-        TodoDto savedTodoDto = todoService.createTodo(todoDto);
+        TodoDto savedTodoDto = todoService.createTodo(todoDto, todoDto.getUserId());
 
         return new ResponseEntity<>(savedTodoDto, HttpStatus.CREATED);
     }
@@ -66,7 +66,7 @@ public class TodoController {
 
     // TODO: get a todo
     @GetMapping("/get/{id}")
-    public ResponseEntity<TodoDto> getTodo( @PathVariable(value = "id") Long id) {
+    public ResponseEntity<TodoDto> getTodo( @PathVariable(value = "id") Integer id) {
 
         TodoDto todoDto = todoService.getTodo(id);
 
@@ -75,7 +75,7 @@ public class TodoController {
 
     // TODO: update a todo
     @PutMapping("/update/{id}")
-    public ResponseEntity<TodoDto> updateTodo(@PathVariable(value = "id") Long id, @RequestBody TodoDto todoDto) {
+    public ResponseEntity<TodoDto> updateTodo(@PathVariable(value = "id") Integer id, @RequestBody TodoDto todoDto) {
 
         TodoDto updatedTodoDto = todoService.updateTodo(id, todoDto);
 
@@ -84,7 +84,7 @@ public class TodoController {
 
     // TODO: delete a todo
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteTodo(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<String> deleteTodo(@PathVariable(value = "id") Integer id) {
 
         todoService.deleteTodo(id);
 
@@ -93,7 +93,7 @@ public class TodoController {
 
     // TODO: complete a todo
     @PatchMapping("/complete/{id}")
-    public ResponseEntity<TodoDto> completeTodo(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<TodoDto> completeTodo(@PathVariable(value = "id") Integer id) {
 
         TodoDto todoDto = todoService.completeTodo(id);
 
@@ -102,7 +102,7 @@ public class TodoController {
 
     // TODO: inComplete a todo
     @PatchMapping("/incomplete/{id}")
-    public ResponseEntity<TodoDto> inCompleteTodo(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<TodoDto> inCompleteTodo(@PathVariable(value = "id") Integer id) {
 
         TodoDto todoDto = todoService.inCompleteTodo(id);
 
