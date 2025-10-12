@@ -13,5 +13,5 @@ public interface TodoRepository extends JpaRepository<Todo, Integer> {
     Page<Todo> findAll(Pageable pageable);
 
     @Query("SELECT t FROM Todo t WHERE t.completed = ?1 AND t.user.id = ?2")
-    List<Todo> findAllByCompleted(boolean completed, Integer userId);
+    List<Todo> findAllTodosByCompletedByUserId(boolean completed, Integer userId);
 }

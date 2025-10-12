@@ -62,6 +62,7 @@ public class AuthController {
         String roleString = user.getRoles().stream().map(Role::getName).collect(Collectors.joining(", "));
 
         UserDto currentUser = new UserDto(
+                user.getId(),
                 user.getName(),
                 user.getUsername(),
                 user.getEmail(),
