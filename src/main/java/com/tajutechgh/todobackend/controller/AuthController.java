@@ -3,18 +3,10 @@ package com.tajutechgh.todobackend.controller;
 import com.tajutechgh.todobackend.dto.JwtAuthResponse;
 import com.tajutechgh.todobackend.dto.LoginDto;
 import com.tajutechgh.todobackend.dto.RegisterDto;
-import com.tajutechgh.todobackend.dto.UserDto;
-import com.tajutechgh.todobackend.entity.Role;
-import com.tajutechgh.todobackend.entity.User;
-import com.tajutechgh.todobackend.repository.UserRepository;
 import com.tajutechgh.todobackend.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.stream.Collectors;
 
 @CrossOrigin("*")
 @RestController
@@ -22,11 +14,9 @@ import java.util.stream.Collectors;
 public class AuthController {
 
     private AuthService authService;
-    private UserRepository userRepository;
 
-    public AuthController(AuthService authService, UserRepository userRepository) {
+    public AuthController(AuthService authService) {
         this.authService = authService;
-        this.userRepository = userRepository;
     }
 
     // TODO: register user
@@ -45,30 +35,5 @@ public class AuthController {
         JwtAuthResponse jwtAuthResponse = authService.loginUser(loginDto);
 
         return new ResponseEntity<>(jwtAuthResponse, HttpStatus.OK);
-    }
-
-
-    // TODO: get current user details
-    @GetMapping("/current-user")
-    public ResponseEntity<?> getCurrentUser(Authentication authentication) {
-
-        String username = authentication.getName();
-
-        User user = userRepository.findByUsername(username).orElseThrow(
-
-                () -> new UsernameNotFoundException("Current user not found")
-        );
-
-        String roleString = user.getRoles().stream().map(Role::getName).collect(Collectors.joining(", "));
-
-        UserDto currentUser = new UserDto(
-                user.getId(),
-                user.getName(),
-                user.getUsername(),
-                user.getEmail(),
-                roleString
-        );
-
-        return ResponseEntity.ok(currentUser);
     }
 }
