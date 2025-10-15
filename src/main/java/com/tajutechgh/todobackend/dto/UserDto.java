@@ -12,6 +12,11 @@ public class UserDto {
 
     }
 
+    public UserDto(String email, String name) {
+        this.email = email;
+        this.name = name;
+    }
+
     public UserDto(Integer id, String name, String username, String email, String role) {
         this.id = id;
         this.name = name;

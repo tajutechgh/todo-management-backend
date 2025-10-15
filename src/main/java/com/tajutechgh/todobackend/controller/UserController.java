@@ -5,10 +5,7 @@ import com.tajutechgh.todobackend.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin("*")
 @RestController
@@ -30,5 +27,14 @@ public class UserController {
         UserDto userDto = userService.getCurrentUserProfile(username);
 
         return new ResponseEntity<>(userDto, HttpStatus.OK);
+    }
+
+    // TODO: update a current user profile
+    @PutMapping("/profile/update/{id}")
+    public ResponseEntity<UserDto> updateCurrentUser(@PathVariable(value = "id") Integer id, @RequestBody UserDto userDto) {
+
+        UserDto updateUserDto = userService.updateCurrentUserProfile(id, userDto);
+
+        return new ResponseEntity<>(updateUserDto, HttpStatus.OK);
     }
 }

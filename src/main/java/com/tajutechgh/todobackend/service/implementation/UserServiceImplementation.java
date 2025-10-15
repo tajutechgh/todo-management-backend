@@ -3,6 +3,7 @@ package com.tajutechgh.todobackend.service.implementation;
 import com.tajutechgh.todobackend.dto.UserDto;
 import com.tajutechgh.todobackend.entity.Role;
 import com.tajutechgh.todobackend.entity.User;
+import com.tajutechgh.todobackend.exception.ResourceNotFoundException;
 import com.tajutechgh.todobackend.mapper.TodoMapper;
 import com.tajutechgh.todobackend.mapper.UserMapper;
 import com.tajutechgh.todobackend.repository.UserRepository;
@@ -29,7 +30,7 @@ public class UserServiceImplementation implements UserService {
 
         String roleString = user.getRoles().stream().map(Role::getName).collect(Collectors.joining(", "));
 
-        User currentUser = new User(
+        UserDto currentUser = new UserDto(
                 user.getId(),
                 user.getName(),
                 user.getUsername(),
@@ -37,6 +38,21 @@ public class UserServiceImplementation implements UserService {
                 roleString
         );
         
-        return UserMapper.mapToUserDto(currentUser);
+        return currentUser;
+    }
+
+    @Override
+    public UserDto updateCurrentUserProfile(Integer id, UserDto userDto) {
+        
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("User", "id", id)
+        );
+        
+        user.setName(userDto.getName());
+        user.setEmail(userDto.getEmail());
+        
+        User updateUser = userRepository.save(user);
+        
+        return UserMapper.mapToUserDto(updateUser);
     }
 }

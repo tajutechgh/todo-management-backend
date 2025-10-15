@@ -5,4 +5,6 @@ import com.tajutechgh.todobackend.dto.UserDto;
 public interface UserService {
     
     UserDto getCurrentUserProfile(String username);
+    
+    UserDto updateCurrentUserProfile(Integer id, UserDto userDto);
 }
