@@ -44,11 +44,11 @@ public class AuthServiceImplementation implements AuthService {
     public String registerUser(RegisterDto registerDto) {
 
         if (userRepository.existsByEmail(registerDto.getEmail())) {
-            throw new TodoAPIException(HttpStatus.BAD_REQUEST, "User already exist with email " + registerDto.getEmail());
+            throw new TodoAPIException(HttpStatus.BAD_REQUEST, "User already exist with this email: " + registerDto.getEmail());
         }
 
         if (userRepository.existsByUsername(registerDto.getUsername())) {
-            throw new TodoAPIException(HttpStatus.BAD_REQUEST, "User already exist with username " + registerDto.getUsername());
+            throw new TodoAPIException(HttpStatus.BAD_REQUEST, "User already exist with this username: " + registerDto.getUsername());
         }
 
         User user = new User();

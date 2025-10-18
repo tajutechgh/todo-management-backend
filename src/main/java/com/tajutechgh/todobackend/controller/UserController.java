@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/v1/auth/user")
+@RequestMapping("/api/v1/users")
 public class UserController {
     
-    private UserService userService;
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -36,5 +36,14 @@ public class UserController {
         UserDto updateUserDto = userService.updateCurrentUserProfile(id, userDto);
 
         return new ResponseEntity<>(updateUserDto, HttpStatus.OK);
+    }
+
+    // TODO: create new user
+    @PostMapping("/create")
+    public ResponseEntity<String> createNewUser(@RequestBody UserDto userDto){
+
+       String response = userService.createUser(userDto);
+
+       return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

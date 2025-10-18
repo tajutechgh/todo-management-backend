@@ -5,6 +5,7 @@ public class UserDto {
     private Integer id;
     private String name;
     private String username;
+    private String password;
     private String email;
     private String role;
 
@@ -23,6 +24,15 @@ public class UserDto {
         this.username = username;
         this.email = email;
         this.role = role;
+    }
+
+    public UserDto(Integer id, String name, String username, String email, String role, String password) {
+        this.id = id;
+        this.name = name;
+        this.username = username;
+        this.email = email;
+        this.role = role;
+        this.password = password;
     }
 
     public Integer getId() {
@@ -63,5 +73,13 @@ public class UserDto {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

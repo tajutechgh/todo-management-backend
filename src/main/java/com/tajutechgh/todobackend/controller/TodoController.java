@@ -24,10 +24,8 @@ import java.util.List;
 @RequestMapping("/api/v1/todos")
 public class TodoController {
 
-    private ModelMapper modelMapper;
-
-    private TodoService todoService;
-    private UserRepository userRepository;
+    private final TodoService todoService;
+    private final UserRepository userRepository;
 
     public TodoController(TodoService todoService, UserRepository userRepository) {
         this.todoService = todoService;
