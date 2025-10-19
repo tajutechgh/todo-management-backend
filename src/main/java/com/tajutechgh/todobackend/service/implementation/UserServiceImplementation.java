@@ -9,6 +9,7 @@ import com.tajutechgh.todobackend.mapper.UserMapper;
 import com.tajutechgh.todobackend.repository.RoleRepository;
 import com.tajutechgh.todobackend.repository.UserRepository;
 import com.tajutechgh.todobackend.service.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +21,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class UserServiceImplementation implements UserService {
     
     private final UserRepository userRepository;
@@ -156,5 +158,21 @@ public class UserServiceImplementation implements UserService {
       User saveUser = userRepository.save(user);
 
       return UserMapper.mapToUserDto(saveUser);
+   }
+
+   @Override
+   public void deleteUser(Integer userId) {
+
+      User user = userRepository.findById(userId).orElseThrow(
+
+              () -> new ResourceNotFoundException ( "User" , "id", userId)
+      );
+
+      // Break the relationship first
+      user.getRoles().clear();
+      userRepository.save(user);
+
+      // Now delete the user safely
+      userRepository.delete(user);
    }
 }

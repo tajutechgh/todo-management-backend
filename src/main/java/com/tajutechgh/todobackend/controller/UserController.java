@@ -75,4 +75,13 @@ public class UserController {
 
       return new ResponseEntity<>(updatedUserDto, HttpStatus.OK);
    }
+
+   // TODO: delete a user
+   @DeleteMapping("/delete/{userId}")
+   public ResponseEntity<String> deleteUser(@PathVariable(value = "userId") Integer userId) {
+
+      userService.deleteUser ( userId );
+
+      return new ResponseEntity<>("User deleted successfully", HttpStatus.OK);
+   }
 }
