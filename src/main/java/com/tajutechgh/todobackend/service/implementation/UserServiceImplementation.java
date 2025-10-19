@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -118,4 +119,23 @@ public class UserServiceImplementation implements UserService {
 
        return "New user created successfully!";
     }
+
+   @Override
+   public UserDto getUserById(Integer userId) {
+
+       User user = userRepository.findById(userId).orElseThrow(
+
+               () -> new ResourceNotFoundException( "User", "id", userId)
+       );
+
+       return UserMapper.mapToUserDto(user);
+   }
+
+   @Override
+   public List<UserDto> getAllUser() {
+
+       List<User> users = userRepository.findAll();
+
+       return users.stream().map(UserMapper::mapToUserDto).collect(Collectors.toList());
+   }
 }

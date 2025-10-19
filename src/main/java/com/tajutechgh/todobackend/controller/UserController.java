@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/v1/users")
@@ -46,4 +48,22 @@ public class UserController {
 
        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
+    // TODO: get user by id
+    @GetMapping("/get/{userId}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable(value = "userId") Integer userId){
+
+       UserDto userDto = userService.getUserById(userId);
+
+       return new ResponseEntity<>(userDto, HttpStatus.OK);
+    }
+
+   // TODO: get all users
+   @GetMapping("/all")
+   public ResponseEntity<List<UserDto>> getAllUsers() {
+
+      List<UserDto> userDtos = userService.getAllUser();
+
+      return new ResponseEntity<>(userDtos, HttpStatus.OK);
+   }
 }
