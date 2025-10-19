@@ -138,4 +138,23 @@ public class UserServiceImplementation implements UserService {
 
        return users.stream().map(UserMapper::mapToUserDto).collect(Collectors.toList());
    }
+
+   @Override
+   public UserDto updateUserDto(Integer userId, UserDto userDto) {
+
+      User user = userRepository.findById(userId).orElseThrow(
+
+              () -> new ResourceNotFoundException("User", "id", userId)
+      );
+
+      user.setName(userDto.getName());
+      user.setUsername(userDto.getUsername());
+      user.setPassword(userDto.getPassword());
+      user.setEmail(userDto.getEmail());
+      user.setRoles(user.getRoles());
+
+      User saveUser = userRepository.save(user);
+
+      return UserMapper.mapToUserDto(saveUser);
+   }
 }
