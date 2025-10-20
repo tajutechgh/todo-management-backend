@@ -44,9 +44,9 @@ public class UserController {
     @PostMapping("/create")
     public ResponseEntity<String> createNewUser(@RequestBody UserDto userDto){
 
-       String response = userService.createUser(userDto);
+       userService.createUser(userDto);
 
-       return new ResponseEntity<>(response, HttpStatus.CREATED);
+       return new ResponseEntity<>("User created successfully!", HttpStatus.CREATED);
     }
 
     // TODO: get user by id
@@ -69,11 +69,11 @@ public class UserController {
 
    // TODO: update a user
    @PutMapping("/update/{userId}")
-   public ResponseEntity<UserDto> updateUser(@PathVariable(value = "userId") Integer userId, @RequestBody UserDto userDto) {
+   public ResponseEntity<String> updateUser(@PathVariable(value = "userId") Integer userId, @RequestBody UserDto userDto) {
 
-      UserDto updatedUserDto = userService.updateUserDto(userId, userDto);
+      userService.updateUser(userId, userDto);
 
-      return new ResponseEntity<>(updatedUserDto, HttpStatus.OK);
+      return new ResponseEntity<>("User updated successfully!", HttpStatus.OK);
    }
 
    // TODO: delete a user

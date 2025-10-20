@@ -90,8 +90,6 @@ public class UserServiceImplementation implements UserService {
 
         String newUserRole = userDto.getRole();
 
-        System.out.println("new user role is: " +newUserRole);
-
         Set<Role> roles = new HashSet<>();
 
        if (newUserRole.equals("USER")) {
@@ -142,7 +140,7 @@ public class UserServiceImplementation implements UserService {
    }
 
    @Override
-   public UserDto updateUserDto(Integer userId, UserDto userDto) {
+   public String updateUser(Integer userId, UserDto userDto) {
 
       User user = userRepository.findById(userId).orElseThrow(
 
@@ -151,13 +149,39 @@ public class UserServiceImplementation implements UserService {
 
       user.setName(userDto.getName());
       user.setUsername(userDto.getUsername());
-      user.setPassword(userDto.getPassword());
+      user.setPassword(passwordEncoder.encode ( userDto.getPassword() ));
       user.setEmail(userDto.getEmail());
-      user.setRoles(user.getRoles());
 
-      User saveUser = userRepository.save(user);
+      String updateUserRole = userDto.getRole();
 
-      return UserMapper.mapToUserDto(saveUser);
+      Set<Role> roles = new HashSet<>();
+
+      if (updateUserRole.equals("USER")) {
+
+         Role userRole = roleRepository.findByName("USER");
+
+         roles.add(userRole);
+
+         user.setRoles(roles);
+
+         User saveUpdatedUser = userRepository.save(user);
+
+         UserMapper.mapToUserDto(saveUpdatedUser);
+
+      } else if (updateUserRole.equals("ADMIN")) {
+
+         Role userRole = roleRepository.findByName("ADMIN");
+
+         roles.add(userRole);
+
+         user.setRoles(roles);
+
+         User saveUpdatedUser = userRepository.save(user);
+
+         UserMapper.mapToUserDto(saveUpdatedUser);
+      }
+
+      return "User updated successfully!";
    }
 
    @Override
