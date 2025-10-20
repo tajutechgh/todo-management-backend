@@ -2,6 +2,7 @@ package com.tajutechgh.todobackend.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -34,6 +35,10 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles;
+
+   @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+   private List<Todo> todos;
+
 
     public User() {
 
